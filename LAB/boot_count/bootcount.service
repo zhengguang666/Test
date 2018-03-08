@@ -1,0 +1,9 @@
+[Unit]
+Description=System Boot count
+
+[Service]
+Type=oneshot
+ExecStart=/mnt/S8800.sh
+
+[Install]
+WantedBy=multi-user.target
