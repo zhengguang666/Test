@@ -1,32 +1,34 @@
 #!/bin/sh
 
-disklist=`cat /proc/partitions | grep [sh]d.$ | awk '{print $4}'`
-array=($disklist)
-length=${#array[@]}
-result=0
-if [ "$length" == "0" ];then
-  echo "There's no udisk insert"
-  exit 1
+disklist=`cat /proc/partitions | grep [sh]d.$ | grep -n '' | awk '{print $5}'`
+if [ "$disklist" = "" ]; then
+    echo -e "No USB or SATA found\n"
+    exit 1
 fi
-result=0
-for n in $disklist; do
-      result=0
-      echo "$n Test"
-      dd if=/dev/urandom of=/mnt/hdd_data bs=1024 count=5120;sync
-      dd if=/mnt/hdd_data of=/run/media/{$n}1 bs=1024 count=5120;sync
-      dd if=/run/media/{$n}1 of=/mnt/hdd_data1 bs=1024 count=5120;sync
-      md5src=`md5sum /mnt/hdd_data`
-      md5src=`echo ${md5src:0:32}`
-	echo $md5src
-      md5des=`md5sum /mnt/hdd_data1`
-      md5des=`echo ${md5des:0:32}`
-	echo $md5des
-      if [ "$md5src" != "$md5des" ]; then
-         echo "$n: Test FAIL!"
-         result=1
-         exit 1
-      else
-         echo "$n: Test PASS!"
+
+for disk in $disklist; do
+      echo "${disk} Test"
+      partlist=`mount | grep ${disk} | awk '{print $3}'`
+      if [ "$partlist" = "" ]; then
+         echo -e "No Partition found\n"
+         continue
       fi
+
+      for part in ${partlist[@]}
+      do
+          dd if=/dev/urandom of=/mnt/disk_origin_data bs=1024 count=256
+          dd if=/mnt/disk_origin_data of=${part}/disk_data bs=1024 count=256
+          dd if=${part}/disk_data of=/mnt/disk_copy_data bs=1024 count=256
+
+          md5src=`md5sum /mnt/disk_origin_data`
+          md5src=`echo ${md5src:0:32}`
+          md5des=`md5sum /mnt/disk_copy_data`
+          md5des=`echo ${md5des:0:32}`
+          if [ "$md5src" != "$md5des" ]; then
+            echo "${part}: Test Fail!"
+          else
+            echo "${part}: Test PASS"
+          fi
+      done
 done
-      
+

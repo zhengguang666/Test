@@ -36,7 +36,7 @@
    
 3) RS232
 	cd Factory/RS232/
-	./AutoRun_uart232
+	./Loop_uart232 /dev/ttyS4
 	
 4) RTC
    cd Factory/RS232/
