@@ -1,11 +1,14 @@
-root
-cd LAB_2
+1. system reboot count scripts
+please into boot_count directory.
+and excute Install scripts.
+$ cd boot_count
+$ ./Install.sh
+
+
+2. excute LAB stability test
+
 ./Runalltest.sh
 
-查看开关机次数
-cat /mnt/boottimes
-开关机次数清零
-rm /mnt/boottimes
-sync
+3.usb test only use dd command
 
-
+					Best wishes!
