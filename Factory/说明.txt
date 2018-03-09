@@ -1,0 +1,108 @@
+1. 烧录系统：
+	cd /mk_inand
+	./mkinand-linux.sh /dev/mmcblk1
+   烧录advloader
+	./mkspi-advboot.sh
+	
+	注意：由于目前ROM-7510系统还未正式申请料号，目前发布的image中
+	并未包含mkspi-advboot.sh/adv_boot.bin，因此需要手动将mkspi-advboot.sh
+	拷到mk_inand文件夹，adv_boot.bin拷到image文件夹。
+
+系统的用户名：root
+无密码
+
+===========================================================
+2. 测试项目：
+1) CAN
+	cd  Factory/CAN/
+	接收端：
+	./can-dump.sh
+	发送端：
+	./can-send.sh
+    
+	接收端收到 11 22 33 44 55 66 77即测试通过
+    
+2) GPIO
+	GPIO测试需要按如下方式连接：
+				GPIO0 --- GPIO4
+				GPIO1 --- GPIO2
+				GPIO3 --- GPIO5
+				GPIO6 --- GPIO7
+				
+	cd Factory/GPIO/
+	./gpio_test.sh
+   
+	如打印信息为1010101010101010，则测试通过
+   
+3) RS232
+	cd Factory/RS232/
+	./AutoRun_uart232
+	
+4) RTC
+   cd Factory/RS232/
+   ./AutoRun_rtc.sh
+  
+5) SPI
+	cd Factory/SPI/
+	./AutoRun_mcspi /dev/spidev1.0
+	./AutoRun_mcspi /dev/spidev1.1
+   
+6) SW4
+	cd Factory/SW4/
+	./sw4_test.sh
+	
+	按下SW4会打印SW4 is Pressed
+	释放SW4会打印SW4 is Released
+	
+7) USB
+  cd Factory/USB/
+  ./udisk.sh
+  
+  当接入SATA后，sda即SATA
+  
+8) M.2
+  目前支持AW178
+  
+	cd Factory/M2/
+	蓝牙:
+	./bt_test.sh
+	
+	发送：
+	ussp-push --debug --timeo 25 34:23:87:B7:B2:CA@ bt-test bt-test
+	注意：34:23:87:B7:B2:CA为接收端蓝牙设备地址，bt-test为要发送的文件
+	
+	接收：
+	obexpushd -B
+	
+	Wifi:
+	./wpa_test.sh "advantech for guest" 12345678
+	ping www.baidu.com
+	
+9) MiniPCIE
+  目前支持EC20
+  
+  pppd call wcdma  &
+  ping –I ppp0 www.advantech.com.cn
+  
+10) display
+	cd Factory/display/
+	./display.sh
+	
+11) OTG
+  cd Factory/OTG/
+  ./otg.sh
+  
+12) I2S
+  cd Factory/I2S/
+  ./i2s.sh
+  
+13) PCIE
+  cd Factory/PCIE
+  ./pcie.sh
+
+===========================================================
+3.mac 地址的烧写：
+格式： mac_write 【MAC地址】
+./mac_write 00:01:02:03:04:05
+
+===========================================================
