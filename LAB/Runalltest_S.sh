@@ -105,7 +105,7 @@ check_net_connect ()
                 done 
             else
                 ifconfig eth0 192.168.1.199 netmask 255.255.255.0 up    
-                ifconfig eth1 192.168.1.200 netmask 255.255.255.0 up
+                ifconfig eth1 192.168.2.200 netmask 255.255.255.0 up
                 while true
                 do
                     ping -I eth0 -c 3 192.168.1.200  > /dev/zero 2>&1

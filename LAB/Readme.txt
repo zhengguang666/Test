@@ -28,7 +28,7 @@ two board/one network interfaces
 
 ./Runalltest_S.sh 2 2 1
 ./Runalltest_S.sh 2 2 2
-two board/one network interfaces
+two board/two network interfaces
 eth0----eth0
 eth1---eth1
 
